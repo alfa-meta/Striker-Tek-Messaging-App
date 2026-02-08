@@ -1,0 +1,194 @@
+Table Users {
+  userGuid uuid [pk]
+  username text [unique, not null]
+  firstName text
+  lastName text
+  phoneNumber text [unique, not null]
+  userStatus text [default: "Offline"]
+  fileGuid uuid [null]
+  paymentGuid uuid [null]
+  createdAt timestamp [not null]
+  lastOnline timestamp
+  
+  indexes {
+    username
+    phoneNumber
+  }
+}
+
+Table UserAuth {
+  userGuid uuid [pk]
+  publicKey text
+  passwordHash text [null]
+  createdAt timestamp [not null]
+}
+
+Table Chats {
+  chatGuid uuid [pk]
+  creatorUserGuid uuid
+  chatType text [not null, default: "direct", note: 'direct, group, channel']
+  chatName text [null, note: 'Only for groups/channels']
+  chatDescription text [null]
+  createdAt timestamp [not null]
+  lastMessageAt timestamp [null]
+  
+  indexes {
+    lastMessageAt
+  }
+}
+
+Table ChatParticipants {
+  id int [pk, increment]
+  chatGuid uuid [not null]
+  userGuid uuid [not null]
+  lastReadMessageId int [null]
+  role text [not null, default: 'member', note: 'owner, admin, member']
+  joinedAt timestamp [not null]
+  isActive bool [default: true, note: 'false if user left chat']
+  
+  indexes {
+    (chatGuid, userGuid) [unique]
+    userGuid
+    chatGuid
+  }
+}
+
+Table Messages {
+  messageId int [pk, increment]
+  chatGuid uuid [not null]
+  userGuid uuid [not null]
+  fileGuid uuid [null]
+  messageText binary [null]
+  replyToMessageId int [null]
+  forwardedFromMessageId int [null]
+  isEdited bool [default: false]
+  isDeleted bool [default: false]
+  createdAt timestamp [not null]
+  editedAt timestamp [null]
+  status text [not null, note: 'sent, delivered, read']
+  timestamp timestamp [not null]
+  
+  indexes {
+    chatGuid
+    (chatGuid, createdAt)
+    userGuid
+  }
+}
+
+Table Contacts {
+  id int [pk, increment]
+  userGuid uuid [not null]
+  contactUserId uuid [not null]
+  addedAt timestamp [not null]
+  
+  indexes {
+    (userGuid, contactUserId) [unique]
+    userGuid
+  }
+}
+
+Table BlockedUsers {
+  id int [pk, increment]
+  userGuid uuid [not null]
+  blockedUserGuid uuid [not null]
+  blockedAt timestamp [not null]
+  
+  indexes {
+    (userGuid, blockedUserGuid) [unique]
+    userGuid
+  }
+}
+
+Table Files {
+  fileGuid uuid [pk]
+  fileName text [not null]
+  fileSize int [not null]
+  mimeType text [not null]
+  uploadedAt timestamp [not null]
+  
+  indexes {
+    uploadedAt
+  }
+}
+
+Table Themes {
+  themeGuid uuid [pk]
+  themeName text [not null]
+  primaryColour text
+  secondaryColour text
+  tertiaryColour text
+}
+
+Table UserSettings {
+  userGuid uuid [pk]
+  profileImageGuid uuid [null]
+  themeGuid uuid [not null]
+  notificationsEnabled bool [default: true]
+  lastSeenPrivacy text [default: 'everyone', note: 'everyone, contacts, nobody']
+}
+
+Table Clients {
+  clientInfoId int [pk, increment]
+  userGuid uuid [not null]
+  ipAddress text [not null]
+  userAgent text [null, note: 'Full user agent string']
+  clientType text [null, note: 'web, ios, android, desktop']
+  clientVersion text [null, note: 'App version number']
+  deviceModel text [null, note: 'iPhone 14 Pro, Samsung Galaxy S23, etc']
+  osName text [null, note: 'iOS, Android, Windows, macOS, Linux']
+  osVersion text [null, note: 'Operating system version']
+  browser text [null, note: 'Chrome, Safari, Firefox, etc - for web clients']
+  browserVersion text [null, note: 'Browser version - for web clients']
+  screenResolution text [null, note: '1920x1080, 2560x1440, etc']
+  timezone text [null, note: 'America/New_York, Europe/London, etc']
+  language text [null, note: 'en-US, es-ES, etc']
+  connectionType text [null, note: 'wifi, cellular, ethernet']
+  city text [null]
+  country text [null]
+  countryCode text [null, note: 'ISO 3166-1 alpha-2']
+  isp text [null, note: 'Internet Service Provider']
+  latitude decimal(10,8) [null, note: 'Approximate location if permission granted']
+  longitude decimal(11,8) [null, note: 'Approximate location if permission granted']
+  
+  indexes {
+    userGuid
+    ipAddress
+    country
+  }
+}
+
+Table Notifications {
+  notificationGuid uuid [pk]
+  userGuid uuid [not null]
+  notificationType text [not null, note: 'message, mention, call']
+  referenceId text [not null, note: 'MessageId or ChatGuid']
+  isRead bool [default: false]
+  createdAt timestamp [not null]
+  
+  indexes {
+    (userGuid, isRead)
+    userGuid
+  }
+}
+
+/* Relationships */
+Ref: UserAuth.userGuid - Users.userGuid [delete: cascade]
+Ref: Chats.creatorUserGuid > Users.userGuid
+Ref: ChatParticipants.chatGuid > Chats.chatGuid [delete: cascade]
+Ref: ChatParticipants.userGuid > Users.userGuid [delete: cascade]
+Ref: ChatParticipants.lastReadMessageId > Messages.messageId
+Ref: Messages.chatGuid > Chats.chatGuid [delete: cascade]
+Ref: Messages.userGuid > Users.userGuid
+Ref: Messages.fileGuid > Files.fileGuid
+Ref: Messages.replyToMessageId > Messages.messageId
+Ref: Messages.forwardedFromMessageId > Messages.messageId
+Ref: Contacts.userGuid > Users.userGuid [delete: cascade]
+Ref: Contacts.contactUserId > Users.userGuid
+Ref: BlockedUsers.userGuid > Users.userGuid [delete: cascade]
+Ref: BlockedUsers.blockedUserGuid > Users.userGuid
+Ref: Users.fileGuid > Files.fileGuid
+Ref: UserSettings.userGuid - Users.userGuid [delete: cascade]
+Ref: UserSettings.profileImageGuid > Files.fileGuid
+Ref: UserSettings.themeGuid > Themes.themeGuid
+Ref: Clients.userGuid > Users.userGuid [delete: cascade]
+Ref: Notifications.userGuid > Users.userGuid [delete: cascade]

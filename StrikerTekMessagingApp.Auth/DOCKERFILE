@@ -1,0 +1,12 @@
+# \Striker-Tek-Messaging-App\StrikerTekMessaginApp.Auth\DOCKERFILE
+
+# Use the official SQL Server 2025 image
+FROM mcr.microsoft.com/mssql/server:2025-latest
+
+# Set environment variables
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=YourStrong@Passw0rd123
+ENV MSSQL_PID=Express
+
+# Expose SQL Server port
+EXPOSE 1433
