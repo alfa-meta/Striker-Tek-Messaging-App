@@ -1671,6 +1671,7 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "Microsoft.EntityFrameworkCore >= 10.0.2",
+      "Microsoft.EntityFrameworkCore.Relational >= 10.0.2",
       "Microsoft.EntityFrameworkCore.SqlServer >= 10.0.2"
     ]
   },
@@ -1726,6 +1727,10 @@
         "targetAlias": "net10.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[10.0.2, )"
+          },
+          "Microsoft.EntityFrameworkCore.Relational": {
             "target": "Package",
             "version": "[10.0.2, )"
           },
