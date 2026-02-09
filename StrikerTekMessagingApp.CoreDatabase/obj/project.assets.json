@@ -3159,11 +3159,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekCoreDatabase\\StrikerTekCoreDatabase.csproj",
-      "projectName": "StrikerTekCoreDatabase",
-      "projectPath": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekCoreDatabase\\StrikerTekCoreDatabase.csproj",
+      "projectUniqueName": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekMessagingApp.CoreDatabase\\StrikerTekMessagingApp.CoreDatabase.csproj",
+      "projectName": "StrikerTekMessagingApp.CoreDatabase",
+      "projectPath": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekMessagingApp.CoreDatabase\\StrikerTekMessagingApp.CoreDatabase.csproj",
       "packagesPath": "C:\\Users\\Striker\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekCoreDatabase\\obj\\",
+      "outputPath": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekMessagingApp.CoreDatabase\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,0 +1,58 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.cs text diff=csharp
+*.cshtml text diff=html
+*.csproj text diff=html
+*.sln text eol=crlf
+*.config text
+*.js text
+*.ts text
+*.tsx text
+*.json text
+*.xml text
+*.md text
+*.txt text
+*.yml text
+*.yaml text
+
+# Shell scripts should always have LF line endings (even on Windows)
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Dockerfile should use LF
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
+
+# Windows batch files should have CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files
+*.dll binary
+*.exe binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.7z binary
+*.gz binary
+*.tar binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+
+# Visual Studio Solution files should use CRLF on all platforms
+*.sln text eol=crlf
+
+# Force LF for text files that should be consistent across platforms
+*.csproj text eol=lf
+*.props text eol=lf
+*.targets text eol=lf

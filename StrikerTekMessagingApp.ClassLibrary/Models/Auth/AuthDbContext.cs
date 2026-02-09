@@ -1,3 +1,5 @@
+// Striker-Tek-Messaging-App/StrikerTekMessagingApp.ClassLibrary/Models/Auth/AuthDbContext.cs
+
 namespace StrikerTekMessagingApp.ClassLibrary;
 
 using Microsoft.EntityFrameworkCore;
