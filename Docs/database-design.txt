@@ -1,3 +1,5 @@
+// Database Design
+
 Table Users {
   userGuid uuid [pk]
   username text [unique, not null]
@@ -6,7 +8,6 @@ Table Users {
   phoneNumber text [unique, not null]
   userStatus text [default: "Offline"]
   fileGuid uuid [null]
-  paymentGuid uuid [null]
   createdAt timestamp [not null]
   lastOnline timestamp
   
@@ -17,15 +18,22 @@ Table Users {
 }
 
 Table UserAuth {
-  userGuid uuid [pk]
+  userAuthGuid uuid [pk]
+  userGuid uuid [not null]
+  email text [unique]
   publicKey text
   passwordHash text [null]
   createdAt timestamp [not null]
+  
+  indexes {
+    userGuid
+    email
+  }
 }
 
 Table Chats {
   chatGuid uuid [pk]
-  creatorUserGuid uuid
+  creatorUserGuid uuid [not null]
   chatType text [not null, default: "direct", note: 'direct, group, channel']
   chatName text [null, note: 'Only for groups/channels']
   chatDescription text [null]
@@ -34,6 +42,7 @@ Table Chats {
   
   indexes {
     lastMessageAt
+    creatorUserGuid
   }
 }
 
@@ -41,9 +50,9 @@ Table ChatParticipants {
   id int [pk, increment]
   chatGuid uuid [not null]
   userGuid uuid [not null]
-  lastReadMessageId int [null]
   role text [not null, default: 'member', note: 'owner, admin, member']
   joinedAt timestamp [not null]
+  leftAt timestamp [null]
   isActive bool [default: true, note: 'false if user left chat']
   
   indexes {
@@ -65,12 +74,27 @@ Table Messages {
   isDeleted bool [default: false]
   createdAt timestamp [not null]
   editedAt timestamp [null]
-  status text [not null, note: 'sent, delivered, read']
-  timestamp timestamp [not null]
+  deletedAt timestamp [null]
   
   indexes {
     chatGuid
     (chatGuid, createdAt)
+    userGuid
+    fileGuid
+    replyToMessageId
+  }
+}
+
+Table MessageDeliveryStatus {
+  id int [pk, increment]
+  messageId int [not null]
+  userGuid uuid [not null]
+  status text [not null, note: 'sent, delivered, read']
+  timestamp timestamp [not null]
+  
+  indexes {
+    (messageId, userGuid) [unique]
+    messageId
     userGuid
   }
 }
@@ -78,12 +102,13 @@ Table Messages {
 Table Contacts {
   id int [pk, increment]
   userGuid uuid [not null]
-  contactUserId uuid [not null]
+  contactUserGuid uuid [not null]
   addedAt timestamp [not null]
   
   indexes {
-    (userGuid, contactUserId) [unique]
+    (userGuid, contactUserGuid) [unique]
     userGuid
+    contactUserGuid
   }
 }
 
@@ -96,11 +121,13 @@ Table BlockedUsers {
   indexes {
     (userGuid, blockedUserGuid) [unique]
     userGuid
+    blockedUserGuid
   }
 }
 
 Table Files {
   fileGuid uuid [pk]
+  uploaderUserGuid uuid [not null]
   fileName text [not null]
   fileSize int [not null]
   mimeType text [not null]
@@ -108,12 +135,13 @@ Table Files {
   
   indexes {
     uploadedAt
+    uploaderUserGuid
   }
 }
 
 Table Themes {
   themeGuid uuid [pk]
-  themeName text [not null]
+  themeName text [not null, unique]
   primaryColour text
   secondaryColour text
   tertiaryColour text
@@ -125,6 +153,11 @@ Table UserSettings {
   themeGuid uuid [not null]
   notificationsEnabled bool [default: true]
   lastSeenPrivacy text [default: 'everyone', note: 'everyone, contacts, nobody']
+  
+  indexes {
+    themeGuid
+    profileImageGuid
+  }
 }
 
 Table Clients {
@@ -149,6 +182,8 @@ Table Clients {
   isp text [null, note: 'Internet Service Provider']
   latitude decimal(10,8) [null, note: 'Approximate location if permission granted']
   longitude decimal(11,8) [null, note: 'Approximate location if permission granted']
+  locationConsentGranted bool [default: false]
+  lastSeenAt timestamp [not null]
   
   indexes {
     userGuid
@@ -168,26 +203,29 @@ Table Notifications {
   indexes {
     (userGuid, isRead)
     userGuid
+    createdAt
   }
 }
 
 /* Relationships */
-Ref: UserAuth.userGuid - Users.userGuid [delete: cascade]
+Ref: UserAuth.userGuid > Users.userGuid [delete: cascade]
 Ref: Chats.creatorUserGuid > Users.userGuid
 Ref: ChatParticipants.chatGuid > Chats.chatGuid [delete: cascade]
 Ref: ChatParticipants.userGuid > Users.userGuid [delete: cascade]
-Ref: ChatParticipants.lastReadMessageId > Messages.messageId
 Ref: Messages.chatGuid > Chats.chatGuid [delete: cascade]
 Ref: Messages.userGuid > Users.userGuid
 Ref: Messages.fileGuid > Files.fileGuid
 Ref: Messages.replyToMessageId > Messages.messageId
 Ref: Messages.forwardedFromMessageId > Messages.messageId
+Ref: MessageDeliveryStatus.messageId > Messages.messageId [delete: cascade]
+Ref: MessageDeliveryStatus.userGuid > Users.userGuid
 Ref: Contacts.userGuid > Users.userGuid [delete: cascade]
-Ref: Contacts.contactUserId > Users.userGuid
+Ref: Contacts.contactUserGuid > Users.userGuid
 Ref: BlockedUsers.userGuid > Users.userGuid [delete: cascade]
 Ref: BlockedUsers.blockedUserGuid > Users.userGuid
 Ref: Users.fileGuid > Files.fileGuid
-Ref: UserSettings.userGuid - Users.userGuid [delete: cascade]
+Ref: Files.uploaderUserGuid > Users.userGuid
+Ref: UserSettings.userGuid > Users.userGuid [delete: cascade]
 Ref: UserSettings.profileImageGuid > Files.fileGuid
 Ref: UserSettings.themeGuid > Themes.themeGuid
 Ref: Clients.userGuid > Users.userGuid [delete: cascade]

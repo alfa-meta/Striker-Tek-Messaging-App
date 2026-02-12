@@ -1,5 +1,7 @@
+// /Striker-Tek-Messaging-App/StrikerTekMessagingApp.ClassLibrary/Models/Users/User.cs
+
 namespace StrikerTekMessagingApp.ClassLibrary;
-public class Users
+public class User
 {
     public Guid UserGuid { get; set; }
     public string Username { get; set; } = "";
