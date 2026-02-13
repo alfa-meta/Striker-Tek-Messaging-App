@@ -1,14 +1,17 @@
-namespace StrikerTekMessagingApp.Auth.DataTransferObjects;
+namespace StrikerTekMessagingApp.Auth.Services;
+
+using StrikerTekMessagingApp.Auth.Services.Interfaces;
+using StrikerTekMessagingApp.Auth.DataTransferObjects;
 
 public class LoginService : ILoginService
 {
 
-    LoginService()
+    public LoginService()
     {
         
     }
 
-    public string CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
+    public string Register(RegisterUserAuthDTO registerUserAuthDTO)
     {
         throw new NotImplementedException();
     }
@@ -18,7 +21,7 @@ public class LoginService : ILoginService
         throw new NotImplementedException();
     }
 
-    public string Register(RegisterUserAuthDTO registerUserAuthDTO)
+    public string CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
     {
         throw new NotImplementedException();
     }

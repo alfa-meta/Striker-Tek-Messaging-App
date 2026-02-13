@@ -1,11 +1,22 @@
 namespace StrikerTekMessaginApp.Auth;
 
+using StrikerTekMessagingApp.Auth.Services.Interfaces;
+using StrikerTekMessagingApp.Auth.Services;
+
 using Microsoft.AspNetCore.Mvc;
+
 
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase, IAuthController
 {
+    private ILoginService _loginService;
+
+    AuthController()
+    {
+        _loginService = new LoginService();
+    }
+
     [HttpGet("home")]
     public async Task<IActionResult> Home()
     {

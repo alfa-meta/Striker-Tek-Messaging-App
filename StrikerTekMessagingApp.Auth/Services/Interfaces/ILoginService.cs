@@ -1,9 +1,10 @@
 namespace StrikerTekMessagingApp.Auth.Services.Interfaces;
 
-using StrikerTekMessagingApp.Auth.Services.Interfaces;
+using StrikerTekMessagingApp.Auth.DataTransferObjects;
+
 public interface ILoginService
 {
-    public string Register(RegisterUserDTO userAuthDTO);
-    public string Login(LoginRequestDTO userAuthDTO);
-    public string CheckIfAccountExists(UserAuthResponseDTO userAuthDTO);
+    public string Register(RegisterUserAuthDTO registerUserAuthDTO);
+    public string Login(LoginRequestDTO loginRequestDTO);
+    public string CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO);
 }
