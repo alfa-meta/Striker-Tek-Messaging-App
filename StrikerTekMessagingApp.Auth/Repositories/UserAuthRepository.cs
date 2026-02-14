@@ -35,6 +35,12 @@ public class UserAuthRepository : IUserAuthRepository
 
     public async Task CreateAccountAsync(UserAuth userAuth)
     {
+        var existingUser = await GetByEmailAsync(userAuth.Email);
+        if (existingUser != null)
+        {
+            throw new InvalidOperationException($"Account with email {userAuth.Email} already exists.");
+        }
+
         await _context.UserAuths.AddAsync(userAuth);
         await _context.SaveChangesAsync();
     }

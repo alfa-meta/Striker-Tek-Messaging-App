@@ -6,6 +6,7 @@ using StrikerTekMessagingApp.Auth.Services.Interface;
 using StrikerTekMessagingApp.Auth.DataTransferObjects;
 using StrikerTekMessagingApp.Auth.Repositories.Interface;
 using StrikerTekMessagingApp.ClassLibrary.Models.Auth;
+using Microsoft.AspNetCore.Mvc;
 using BCrypt.Net;
 
 public class LoginService : ILoginService
@@ -17,12 +18,12 @@ public class LoginService : ILoginService
         _userAuthRepository = userAuthRepository;
     }
 
-    public async Task<bool> Register(RegisterUserAuthDTO registerUserAuthDTO)
+    public async Task<IActionResult> Register(RegisterUserAuthDTO registerUserAuthDTO)
     {
         var existingUser = await _userAuthRepository.GetByEmailAsync(registerUserAuthDTO.Email);
         if (existingUser != null)
         {
-            return false;
+            return new BadRequestObjectResult(new { message = "This Email is already in use."});
         }
 
         string hashedPassword = BCrypt.HashPassword(registerUserAuthDTO.Password);
@@ -35,23 +36,30 @@ public class LoginService : ILoginService
         };
 
         await _userAuthRepository.CreateAccountAsync(userAuth);
-        return true;
+        return new OkObjectResult(new { message = "User registered successfully"});
     }
 
-    public async Task<bool> Login(LoginRequestDTO loginRequestDTO)
+    public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
     {
 
         UserAuth? userAuth = await _userAuthRepository.GetByEmailAsync(loginRequestDTO.Email);
 
         if (userAuth == null)
         {
-            return false;
+            return new UnauthorizedObjectResult(new { message = "Invalid email or password."});
         }
 
-        return BCrypt.Verify(loginRequestDTO.Password, userAuth.PasswordHash);
+        bool isPasswordValid = BCrypt.Verify(loginRequestDTO.Password, userAuth.PasswordHash);
+
+        if (!isPasswordValid)
+        {
+            return new UnauthorizedObjectResult(new { message = "Invalid email or password"});
+        }
+
+        return new OkObjectResult(new { message = "Login successful"});
     }
 
-    public async Task<bool> CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
+    public async Task<IActionResult> CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
     {
         throw new NotImplementedException();
     }

@@ -37,12 +37,7 @@ public class AuthController : ControllerBase, IAuthController
             Password = request.Password
         };
 
-        bool success = await _loginService.Register(registerUserAuthDTO);
-
-        if (success)
-            return Ok(new { token = "your-token-here" });
-        else
-            return Unauthorized();
+        return await _loginService.Register(registerUserAuthDTO);
     }
 
     [HttpPost("login")]
@@ -57,12 +52,7 @@ public class AuthController : ControllerBase, IAuthController
             Password = request.Password
         };
 
-        bool success = await _loginService.Login(LoginUserAuthDTO);
-
-        if (success)
-            return Ok(new { token = "your-token-here" });
-        else
-            return Unauthorized();
+        return await _loginService.Login(LoginUserAuthDTO);
     }
 
     [HttpPost("refresh-token")]
