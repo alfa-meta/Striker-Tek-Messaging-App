@@ -1,7 +1,8 @@
 namespace StrikerTekMessaginApp.Auth;
 
 using StrikerTekMessagingApp.Auth.Services.Interfaces;
-using StrikerTekMessagingApp.Auth.Services;
+using StrikerTekMessagingApp.Auth.DataTransferObjects;
+using StrikerTekMessagingApp.Auth.Models.Requests;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,9 @@ public class AuthController : ControllerBase, IAuthController
 {
     private ILoginService _loginService;
 
-    AuthController()
+    public AuthController(ILoginService loginService)
     {
-        _loginService = new LoginService();
+        _loginService = loginService;
     }
 
     [HttpGet("home")]
@@ -24,9 +25,19 @@ public class AuthController : ControllerBase, IAuthController
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register()
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        bool success = true;
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        RegisterUserAuthDTO registerUserAuthDTO = new RegisterUserAuthDTO()
+        {
+            PublicKey = request.PublicKey,
+            Email = request.Email,
+            Password = request.Password
+        };
+
+        bool success = await _loginService.Register(registerUserAuthDTO);
 
         if (success)
             return Ok(new { token = "your-token-here" });

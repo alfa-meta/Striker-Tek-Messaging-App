@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "1wNi0krcSmg=",
+  "dgSpecHash": "WgiN3r/5MYY=",
   "success": true,
   "projectFilePath": "C:\\Users\\Striker\\Documents\\Projects\\StrikerTek\\Striker-Tek-Messaging-App\\StrikerTekMessagingApp.Auth\\StrikerTekMessagingApp.Auth.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Striker\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\Striker\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
+    "C:\\Users\\Striker\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Striker\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Striker\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\8.0.0\\microsoft.bcl.asyncinterfaces.8.0.0.nupkg.sha512",
     "C:\\Users\\Striker\\.nuget\\packages\\microsoft.bcl.cryptography\\9.0.4\\microsoft.bcl.cryptography.9.0.4.nupkg.sha512",

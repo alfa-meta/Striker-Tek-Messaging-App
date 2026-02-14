@@ -4,7 +4,7 @@ using StrikerTekMessagingApp.Auth.DataTransferObjects;
 
 public interface ILoginService
 {
-    public string Register(RegisterUserAuthDTO registerUserAuthDTO);
-    public string Login(LoginRequestDTO loginRequestDTO);
-    public string CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO);
+    public Task<bool> Register(RegisterUserAuthDTO registerUserAuthDTO);
+    public Task<bool> Login(LoginRequestDTO loginRequestDTO);
+    public Task<bool> CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO);
 }

@@ -1,27 +1,57 @@
+// Striker-Tek-Messaging-App/StrikerTekMessagingApp.Auth/Services/LoginService.cs
+
 namespace StrikerTekMessagingApp.Auth.Services;
 
 using StrikerTekMessagingApp.Auth.Services.Interfaces;
 using StrikerTekMessagingApp.Auth.DataTransferObjects;
+using StrikerTekMessagingApp.Auth.Repositories.Interface;
+using StrikerTekMessagingApp.ClassLibrary.Models.Auth;
+using BCrypt.Net;
 
 public class LoginService : ILoginService
 {
+    private readonly IUserAuthRepository _userAuthRepository;
 
-    public LoginService()
+    public LoginService(IUserAuthRepository userAuthRepository)
     {
-        
+        _userAuthRepository = userAuthRepository;
     }
 
-    public string Register(RegisterUserAuthDTO registerUserAuthDTO)
+    public async Task<bool> Register(RegisterUserAuthDTO registerUserAuthDTO)
     {
-        throw new NotImplementedException();
+        var existingUser = await _userAuthRepository.GetByEmailAsync(registerUserAuthDTO.Email);
+        if (existingUser != null)
+        {
+            return false;
+        }
+
+        string hashedPassword = BCrypt.HashPassword(registerUserAuthDTO.Password);
+
+        UserAuth userAuth = new UserAuth()
+        {
+            PublicKey = registerUserAuthDTO.PublicKey,
+            Email = registerUserAuthDTO.Email,
+            PasswordHash = hashedPassword
+        };
+
+        await _userAuthRepository.CreateAccountAsync(userAuth);
+        return true;
     }
 
-    public string Login(LoginRequestDTO loginRequestDTO)
+    public async Task<bool> Login(LoginRequestDTO loginRequestDTO)
     {
-        throw new NotImplementedException();
+
+        UserAuth? userAuth = await _userAuthRepository.GetByEmailAsync(loginRequestDTO.Email);
+
+        if (userAuth == null)
+        {
+            return false;
+        }
+
+        return BCrypt.Verify(loginRequestDTO.Password, userAuth.PasswordHash);
     }
 
-    public string CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
+    public async Task<bool> CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
     {
         throw new NotImplementedException();
     }

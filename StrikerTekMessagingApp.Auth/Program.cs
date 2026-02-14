@@ -1,6 +1,6 @@
 ﻿// Striker-Tek-Messaging-App/StrikerTekMessagingApp.Auth/Program.cs
 
-using StrikerTekMessagingApp.ClassLibrary;
+using StrikerTekMessagingApp.ClassLibrary.Models.Auth;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -7,12 +7,12 @@ namespace StrikerTekMessagingApp.ClassLibrary.Models.Auth;
 // This is part of Auth Database.
 public class UserAuth
 {
-    public Guid UserAuthGuid { get; private set; }
-    public Guid UserGuid { get; private set; }
-    public string PublicKey { get; private set; } = "";
-    public string Email { get; private set; } = "";
-    public string? PasswordHash { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public Guid UserAuthGuid { get; set; }
+    public Guid UserGuid { get; set; }
+    public string PublicKey { get; set; } = "";
+    public string Email { get; set; } = "";
+    public string? PasswordHash { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     // Navigation properties
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
