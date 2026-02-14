@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using StrikerTekMessagingApp.ClassLibrary;
+using StrikerTekMessagingApp.ClassLibrary.Models.Auth;
 
 #nullable disable
 
@@ -22,7 +22,7 @@ namespace StrikerTekMessagingApp.ClassLibrary.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StrikerTekMessagingApp.ClassLibrary.RefreshToken", b =>
+            modelBuilder.Entity("StrikerTekMessagingApp.ClassLibrary.Models.Auth.RefreshToken", b =>
                 {
                     b.Property<string>("TokenHash")
                         .HasColumnType("nvarchar(450)");
@@ -50,16 +50,17 @@ namespace StrikerTekMessagingApp.ClassLibrary.Migrations
 
                     b.HasIndex("ExpiresAt");
 
-                    b.HasIndex("Jti");
+                    b.HasIndex("Jti")
+                        .IsUnique();
 
                     b.HasIndex("UserAuthGuid");
 
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("StrikerTekMessagingApp.ClassLibrary.UserAuth", b =>
+            modelBuilder.Entity("StrikerTekMessagingApp.ClassLibrary.Models.Auth.UserAuth", b =>
                 {
-                    b.Property<Guid>("UserGuid")
+                    b.Property<Guid>("UserAuthGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -77,18 +78,33 @@ namespace StrikerTekMessagingApp.ClassLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserAuthGuid")
+                    b.Property<Guid>("UserGuid")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserGuid");
+                    b.HasKey("UserAuthGuid");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("UserGuid")
-                        .IsUnique();
+                    b.HasIndex("UserGuid");
 
                     b.ToTable("UserAuths");
+                });
+
+            modelBuilder.Entity("StrikerTekMessagingApp.ClassLibrary.Models.Auth.RefreshToken", b =>
+                {
+                    b.HasOne("StrikerTekMessagingApp.ClassLibrary.Models.Auth.UserAuth", "UserAuth")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserAuthGuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserAuth");
+                });
+
+            modelBuilder.Entity("StrikerTekMessagingApp.ClassLibrary.Models.Auth.UserAuth", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

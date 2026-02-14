@@ -2,7 +2,7 @@
 
 namespace StrikerTekMessagingApp.Auth.Services;
 
-using StrikerTekMessagingApp.Auth.Services.Interfaces;
+using StrikerTekMessagingApp.Auth.Services.Interface;
 using StrikerTekMessagingApp.Auth.DataTransferObjects;
 using StrikerTekMessagingApp.Auth.Repositories.Interface;
 using StrikerTekMessagingApp.ClassLibrary.Models.Auth;

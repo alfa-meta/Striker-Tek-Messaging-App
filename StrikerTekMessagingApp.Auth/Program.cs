@@ -1,6 +1,10 @@
 ﻿// Striker-Tek-Messaging-App/StrikerTekMessagingApp.Auth/Program.cs
 
 using StrikerTekMessagingApp.ClassLibrary.Models.Auth;
+using StrikerTekMessagingApp.Auth.Services;
+using StrikerTekMessagingApp.Auth.Services.Interface;
+using StrikerTekMessagingApp.Auth.Repositories;
+using StrikerTekMessagingApp.Auth.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +16,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthDatabase"))
 );
+
+// Register repositories
+builder.Services.AddScoped<IUserAuthRepository, UserAuthRepository>();
+
+// Register services
+builder.Services.AddScoped<ILoginService, LoginService>();
+
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-namespace StrikerTekMessagingApp.Auth.Services.Interfaces;
+namespace StrikerTekMessagingApp.Auth.Services.Interface;
 
 using StrikerTekMessagingApp.Auth.DataTransferObjects;
 

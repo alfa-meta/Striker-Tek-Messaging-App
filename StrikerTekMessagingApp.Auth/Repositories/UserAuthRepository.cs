@@ -35,7 +35,8 @@ public class UserAuthRepository : IUserAuthRepository
 
     public async Task CreateAccountAsync(UserAuth userAuth)
     {
-        
+        await _context.UserAuths.AddAsync(userAuth);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAccountAsync(UserAuth userAuth)

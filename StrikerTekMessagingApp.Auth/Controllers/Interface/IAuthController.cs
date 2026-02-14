@@ -1,4 +1,4 @@
-namespace StrikerTekMessaginApp.Auth;
+namespace StrikerTekMessagingApp.Auth;
 
 using Microsoft.AspNetCore.Mvc;
 using StrikerTekMessagingApp.Auth.Models.Requests;
@@ -7,6 +7,6 @@ public interface IAuthController
 {
     Task<IActionResult> Home();
     Task<IActionResult> Register(RegisterRequest request);
-    Task<IActionResult> Login();
+    Task<IActionResult> Login(LoginRequest request);
     Task<IActionResult> RefreshToken();
 }

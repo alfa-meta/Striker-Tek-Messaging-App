@@ -1,6 +1,6 @@
-namespace StrikerTekMessaginApp.Auth;
+namespace StrikerTekMessagingApp.Auth;
 
-using StrikerTekMessagingApp.Auth.Services.Interfaces;
+using StrikerTekMessagingApp.Auth.Services.Interface;
 using StrikerTekMessagingApp.Auth.DataTransferObjects;
 using StrikerTekMessagingApp.Auth.Models.Requests;
 
@@ -46,9 +46,23 @@ public class AuthController : ControllerBase, IAuthController
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login()
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        return Ok(new { message = "Login successful", token = "test-token" });
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        LoginRequestDTO LoginUserAuthDTO = new LoginRequestDTO()
+        {
+            Email = request.Email,
+            Password = request.Password
+        };
+
+        bool success = await _loginService.Login(LoginUserAuthDTO);
+
+        if (success)
+            return Ok(new { token = "your-token-here" });
+        else
+            return Unauthorized();
     }
 
     [HttpPost("refresh-token")]
