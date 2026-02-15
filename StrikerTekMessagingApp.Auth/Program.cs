@@ -6,6 +6,7 @@ using StrikerTekMessagingApp.Auth.Services.Interface;
 using StrikerTekMessagingApp.Auth.Repositories;
 using StrikerTekMessagingApp.Auth.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +18,14 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthDatabase"))
 );
 
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
 // Register repositories
 builder.Services.AddScoped<IUserAuthRepository, UserAuthRepository>();
 
 // Register services
 builder.Services.AddScoped<ILoginService, LoginService>();
-
+builder.Services.AddSingleton<ICryptographyService, CryptographyService>();
 
 var app = builder.Build();
 

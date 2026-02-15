@@ -22,7 +22,8 @@ Table UserAuth {
   userGuid uuid [not null]
   email text [unique]
   publicKey text
-  passwordHash text [null]
+  passworSald text [not null]
+  passwordHash text [not null]
   createdAt timestamp [not null]
   
   indexes {

@@ -22,8 +22,10 @@ public class AuthDbContext : DbContext
             entity.HasIndex(e => e.UserGuid);
             entity.HasIndex(e => e.Email).IsUnique();
 
-            entity.Property(e => e.Email).IsRequired();
             entity.Property(e => e.PublicKey).IsRequired();
+            entity.Property(e => e.Email).IsRequired();
+            entity.Property(e => e.PasswordSalt).IsRequired();
+            entity.Property(e => e.PasswordHash).IsRequired();
             entity.Property(e => e.CreatedAt).IsRequired();
         });
 

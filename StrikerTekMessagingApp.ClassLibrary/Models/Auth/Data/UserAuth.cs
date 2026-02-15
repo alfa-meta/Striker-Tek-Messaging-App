@@ -11,7 +11,8 @@ public class UserAuth
     public Guid UserGuid { get; set; }
     public string PublicKey { get; set; } = "";
     public string Email { get; set; } = "";
-    public string? PasswordHash { get; set; }
+    public string PasswordSalt { get; set; } = "";
+    public string PasswordHash { get; set; } = "";
     public DateTime CreatedAt { get; set; }
 
     // Navigation properties
