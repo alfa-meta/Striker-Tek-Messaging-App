@@ -12,10 +12,12 @@ using BCrypt.Net;
 public class LoginService : ILoginService
 {
     private readonly IUserAuthRepository _userAuthRepository;
+    private readonly ICryptographyService _cryptographyService;
 
-    public LoginService(IUserAuthRepository userAuthRepository)
+    public LoginService(IUserAuthRepository userAuthRepository, ICryptographyService cryptographyService)
     {
         _userAuthRepository = userAuthRepository;
+        _cryptographyService = cryptographyService;
     }
 
     public async Task<IActionResult> Register(RegisterUserAuthDTO registerUserAuthDTO)
@@ -56,7 +58,8 @@ public class LoginService : ILoginService
             return new UnauthorizedObjectResult(new { message = "Invalid email or password"});
         }
 
-        return new OkObjectResult(new { message = "Login successful"});
+        string token = _cryptographyService.GenerateJwtToken(userAuth.UserAuthGuid.ToString(), userAuth.Email);
+        return new OkObjectResult(new { message = "Login Successful", token = token});
     }
 
     public async Task<IActionResult> CheckIfAccountExists(UserAuthResponseDTO userAuthResponseDTO)
