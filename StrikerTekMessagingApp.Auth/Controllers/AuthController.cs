@@ -1,4 +1,4 @@
-namespace StrikerTekMessagingApp.Auth;
+namespace StrikerTekMessagingApp.Auth.Controllers;
 
 using StrikerTekMessagingApp.Auth.Services.Interface;
 using StrikerTekMessagingApp.Auth.DataTransferObjects;
@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase, IAuthController
 {
-    private ILoginService _loginService;
+    private readonly ILoginService _loginService;
 
     public AuthController(ILoginService loginService)
     {
@@ -30,7 +30,7 @@ public class AuthController : ControllerBase, IAuthController
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        RegisterUserAuthDTO registerUserAuthDTO = new RegisterUserAuthDTO()
+        RegisterUserAuthDTO registerUserAuthDTO = new()
         {
             PublicKey = request.PublicKey,
             Email = request.Email,
@@ -46,7 +46,7 @@ public class AuthController : ControllerBase, IAuthController
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        LoginRequestDTO LoginUserAuthDTO = new LoginRequestDTO()
+        LoginRequestDTO LoginUserAuthDTO = new()
         {
             Email = request.Email,
             Password = request.Password
